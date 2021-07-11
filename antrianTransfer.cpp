@@ -20,7 +20,7 @@ class Antrian
 public:
     array <User, 10> data;
     int jumlahAntrian = -1;
-
+    
     bool antrianKosong()
     {
         return jumlahAntrian == -1;
@@ -67,6 +67,8 @@ public:
             outfile.close();
         }
     }
+
+
     
 };
 
