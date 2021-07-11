@@ -59,6 +59,8 @@ public:
             system("cls");
             panjangAntrian++;
 
+            pilihanBank();
+            
             data[panjangAntrian].kodeAntrian = kodeAntrianBaru;
             kodeAntrianBaru++;
 
@@ -187,7 +189,7 @@ public:
 
 int main()
 {
-    
+
 }
 
 void pilihanBank()
