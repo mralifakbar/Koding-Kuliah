@@ -117,19 +117,26 @@ public:
 
     void kodeAntrianSekarang()
     {
-        char _getKode[10];
-        ifstream readFile("DataAntrian");
-        if(!readFile)
+        if(antrianKosong())
         {
-            cout << "File tidak ada\n";
+            cout << "Antrian sedang kosong\n";
         }
         else
         {
-            readFile.seekg(0, ios::beg); //File Pointer
-            readFile.getline(_getKode, 10);
-            cout << "Kode antrian terdepan : " << _getKode << '\n';
+            char _getKode[10];
+            ifstream readFile("DataAntrian");
+            if(!readFile)
+            {
+                cout << "File tidak ada\n";
+            }
+            else
+            {
+                readFile.seekg(0, ios::beg); //File Pointer
+                readFile.getline(_getKode, 10);
+                cout << "Kode antrian terdepan : " << _getKode << '\n';
+            }
+            readFile.close();
         }
-        readFile.close();
     }
 
     void hapusAntrian()
@@ -141,7 +148,7 @@ public:
         else
         {
             ofstream writeFile("DataAntrian");
-            writeFile << NULL;
+            writeFile << "";
             writeFile.close();
 
             panjangAntrian = -1;
@@ -189,7 +196,50 @@ public:
 
 int main()
 {
+    Antrian hariIni;
+    int pilihan;
 
+    do
+    {
+        system("cls");
+        cout << "Pilihan Layanan: \n";
+        cout << "1. Tambah Antrian\n";
+        cout << "2. Proses Antrian\n";
+        cout << "3. Kode Antrian Sekarang\n";
+        cout << "4. Hapus Antrian\n";
+        cout << "5. Tampilkan Antrian\n";
+        cout << "6. Keluar\n";
+        cout << "Pilihan: ";
+        cin >> pilihan;
+
+        switch (pilihan)
+        {
+        case 1:
+            hariIni.tambahAntrian();
+            break;
+        
+        case 2:
+            hariIni.prosesAntrian();
+            break;
+        
+        case 3:
+            hariIni.kodeAntrianSekarang();
+            break;
+        
+        case 4:
+            hariIni.hapusAntrian();
+            break;
+
+        case 5:
+            hariIni.tampilkanAntrian();
+            break;
+        
+        case 6:
+            exit(1);
+        }
+
+        system("pause");
+    } while(pilihan != 6);
 }
 
 void pilihanBank()
