@@ -1,3 +1,11 @@
+/*
+
+Alif Akbar Kartadinata
+2017051049
+B
+
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -21,8 +29,6 @@ array <User, 10> data;
 class Antrian
 {
 public:
-    
-
     bool antrianKosong()
     {
         return panjangAntrian == -1;
