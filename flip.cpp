@@ -5,27 +5,6 @@ array <string, 5> bank = {"BRI", "Mandiri", "BCA", "BNI", "Jago"}; // STL
 int panjangAntrian;
 
 void pilihanBank();
-void awal()
-{
-    char tmp[100];
-    ifstream readFile("DataAntrian");
-    readFile.getline(tmp, 100);
-    if(sizeof(tmp) == 0)
-    {
-        panjangAntrian = -1;
-    }
-    else
-    {
-
-        stringstream length(tmp);
-        length >> panjangAntrian;
-        if(panjangAntrian != -1)
-        {
-            panjangAntrian--;
-        }
-    }
-    readFile.close();
-}
 
 class User
 {
@@ -37,11 +16,12 @@ public:
     long long jumlahTransfer;
 };
 
+array <User, 10> data;
+
 class Antrian
 {
 public:
-    array <User, 10> data;
-    // User data[10];
+    
 
     bool antrianKosong()
     {
@@ -78,7 +58,7 @@ public:
         {
             system("cls");
             panjangAntrian++;
-            
+
             cout << "Nama: ";
             cin.ignore(1, '\n');
             getline(cin, data[panjangAntrian].namaUser);
@@ -110,7 +90,7 @@ public:
             
             masukkanFile();
 
-            cout << "Data berhasil ditambahkan!\n";
+            cout << "\nData berhasil ditambahkan!\n";
         }
     }
 
@@ -152,7 +132,7 @@ public:
             }
             else
             {
-                readFile.seekg(0, ios::cur); //File Pointer
+                readFile.seekg(0, ios::beg); //File Pointer
                 readFile.getline(_getKode, 10);
                 cout << "Panjang antrian saat ini: " << _getKode << '\n';
             }
@@ -178,7 +158,6 @@ public:
     void tampilkanAntrian()
     {
         char tampung[100];
-        char *_kode= new char;
         int _kodeBank;
         if(antrianKosong())
         {
@@ -201,22 +180,23 @@ public:
                     cout << "Antrian ke-" << i + 1 << '\n';
                     readFile.getline(tampung, 100);
                     cout << "Nama\t\t: " << tampung << '\n';
+
                     readFile.getline(tampung, 100);
                     stringstream userBank(tampung);
                     userBank >> _kodeBank;
-                    // _kode[0] = tampung[i];
-                    // _kodeBank = atoi(_kode);
                     cout << "Bank Asal\t: " << bank[_kodeBank - 1] << '\n';
+
                     readFile.getline(tampung, 100);
                     stringstream receiveBank(tampung);
                     receiveBank >> _kodeBank;
-                    // _kode[0] = tampung[i];
-                    // _kodeBank = atoi(_kode);
                     cout << "Bank Tujuan\t: " << bank[_kodeBank - 1] << '\n';
+
                     readFile.getline(tampung, 100);
                     cout << "No. Rek Tujuan\t: " << tampung << '\n';
+
                     readFile.getline(tampung, 100);
                     cout << "Jumlah Transfer\t: " << tampung << '\n';
+
                     readFile.getline(tampung, 2);
                     cout << '\n';
                 }
@@ -226,10 +206,12 @@ public:
     }
 };
 
+void awal();
+
 int main()
 {
-    awal();
     Antrian hariIni;
+    awal();
     int pilihan;
 
     do
@@ -269,13 +251,69 @@ int main()
             break;
         
         case 6:
-            hariIni.hapusAntrian();
             exit(1);
         }
 
         cout << '\n';
         system("pause");
     } while(pilihan != 6);
+}
+
+void awal()
+{
+    string _inpStr;
+    int _inpInt;
+    long long _inpLl;
+    char tmp[100];
+
+    ifstream readFile("DataAntrian");
+    readFile.getline(tmp, 100);
+    if(sizeof(tmp) == 0)
+    {
+        panjangAntrian = -1;
+    }
+    else
+    {
+        stringstream length(tmp);
+        length >> panjangAntrian;
+        if(panjangAntrian != -1)
+        {
+            panjangAntrian--;
+            ifstream readFile("DataAntrian");
+            readFile.getline(tmp, 100);
+            readFile.getline(tmp, 100);
+            for(int i = 0; i <= panjangAntrian; i++)
+            {
+                readFile.getline(tmp, 100);
+                stringstream getName(tmp);
+                getName >> _inpStr;
+                data[i].namaUser = _inpStr;
+
+                readFile.getline(tmp, 100);
+                stringstream getUserBank(tmp);
+                getUserBank >> _inpInt;
+                data[i].bankUser = _inpInt;
+
+                readFile.getline(tmp, 100);
+                stringstream getReceiveBank(tmp);
+                getReceiveBank >> _inpInt;
+                data[i].bankTujuan = _inpInt;
+
+                readFile.getline(tmp, 100);
+                stringstream getNoReceiveBank(tmp);
+                getNoReceiveBank >> _inpStr;
+                data[i].noRekTujuan = _inpStr;
+
+                readFile.getline(tmp, 100);
+                stringstream getAmount(tmp);
+                getAmount >> _inpLl;
+                data[i].jumlahTransfer = _inpLl;
+                readFile.getline(tmp, 100);
+            }
+            readFile.close();
+        }
+    }
+    readFile.close();
 }
 
 void pilihanBank()
