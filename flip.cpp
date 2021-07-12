@@ -2,14 +2,34 @@
 using namespace std;
 
 array <string, 5> bank = {"BRI", "Mandiri", "BCA", "BNI", "Jago"}; // STL
-int kodeAntrianBaru = 1000;
+int panjangAntrian;
 
 void pilihanBank();
+void awal()
+{
+    char tmp[100];
+    ifstream readFile("DataAntrian");
+    readFile.getline(tmp, 100);
+    if(sizeof(tmp) == 0)
+    {
+        panjangAntrian = -1;
+    }
+    else
+    {
+
+        stringstream length(tmp);
+        length >> panjangAntrian;
+        if(panjangAntrian != -1)
+        {
+            panjangAntrian--;
+        }
+    }
+    readFile.close();
+}
 
 class User
 {
 public:
-    int kodeAntrian;
     string namaUser;
     int bankUser;
     int bankTujuan;
@@ -20,8 +40,8 @@ public:
 class Antrian
 {
 public:
-    User data[10];
-    int panjangAntrian = -1;
+    array <User, 10> data;
+    // User data[10];
 
     bool antrianKosong()
     {
@@ -36,9 +56,9 @@ public:
     void masukkanFile()
     {
         ofstream writeFile("DataAntrian");
+        writeFile << panjangAntrian + 1 << "\n\n"; // Karena antrian dimulai dari 1
         for(int i = 0; i <= panjangAntrian; i++)
         {
-            writeFile << data[i].kodeAntrian << '\n';
             writeFile << data[i].namaUser << '\n';
             writeFile << data[i].bankUser << '\n';
             writeFile << data[i].bankTujuan << '\n';
@@ -58,15 +78,13 @@ public:
         {
             system("cls");
             panjangAntrian++;
-
-            pilihanBank();
             
-            data[panjangAntrian].kodeAntrian = kodeAntrianBaru;
-            kodeAntrianBaru++;
-
             cout << "Nama: ";
             cin.ignore(1, '\n');
             getline(cin, data[panjangAntrian].namaUser);
+            
+            cout << '\n';
+            pilihanBank();
 
             do
             {
@@ -84,9 +102,12 @@ public:
             cin.ignore(1, '\n');
             getline(cin, data[panjangAntrian].noRekTujuan);
 
-            cout << "Jumlah Transfer: ";
-            cin >> data[panjangAntrian].jumlahTransfer;
-
+            do
+            {
+                cout << "Jumlah Transfer: ";
+                cin >> data[panjangAntrian].jumlahTransfer;
+            } while (data[panjangAntrian].jumlahTransfer < 1000 || data[panjangAntrian].jumlahTransfer > 2000000000);
+            
             masukkanFile();
 
             cout << "Data berhasil ditambahkan!\n";
@@ -101,7 +122,7 @@ public:
         }
         else
         {
-            cout << "Antrian dengan kode antrian " << data[0].kodeAntrian << " sedang diproses\n";
+            cout << "Antrian terdepan atas nama " << data[0].namaUser << " sedang diproses\n";
             cout << "Tersisa " << panjangAntrian  << " orang dalam antrian\n";
 
             for(int i = 0; i < panjangAntrian; i++)
@@ -115,7 +136,7 @@ public:
         }
     }
 
-    void kodeAntrianSekarang()
+    void panjangAntrianSekarang()
     {
         if(antrianKosong())
         {
@@ -131,9 +152,9 @@ public:
             }
             else
             {
-                readFile.seekg(0, ios::beg); //File Pointer
+                readFile.seekg(0, ios::cur); //File Pointer
                 readFile.getline(_getKode, 10);
-                cout << "Kode antrian terdepan : " << _getKode << '\n';
+                cout << "Panjang antrian saat ini: " << _getKode << '\n';
             }
             readFile.close();
         }
@@ -147,17 +168,18 @@ public:
         }
         else
         {
-            ofstream writeFile("DataAntrian");
-            writeFile << "";
-            writeFile.close();
-
+            data.empty();
             panjangAntrian = -1;
+            masukkanFile();
+            cout << "Antrian berhasil dihapus\n";
         }
     }
 
     void tampilkanAntrian()
     {
         char tampung[100];
+        char *_kode= new char;
+        int _kodeBank;
         if(antrianKosong())
         {
             cout << "Antrian masih kosong\n";
@@ -171,21 +193,30 @@ public:
             }
             else
             {
+                cout << '\n';
+                readFile.getline(tampung, 2);
+                readFile.getline(tampung, 2);
                 for(int i = 0; i <= panjangAntrian; i++)
                 {
                     cout << "Antrian ke-" << i + 1 << '\n';
                     readFile.getline(tampung, 100);
-                    cout << "Kode Antrian: " << tampung << '\n';
+                    cout << "Nama\t\t: " << tampung << '\n';
                     readFile.getline(tampung, 100);
-                    cout << "Nama: " << tampung << '\n';
+                    stringstream userBank(tampung);
+                    userBank >> _kodeBank;
+                    // _kode[0] = tampung[i];
+                    // _kodeBank = atoi(_kode);
+                    cout << "Bank Asal\t: " << bank[_kodeBank - 1] << '\n';
                     readFile.getline(tampung, 100);
-                    cout << "Bank Asal: " << tampung << '\n';
+                    stringstream receiveBank(tampung);
+                    receiveBank >> _kodeBank;
+                    // _kode[0] = tampung[i];
+                    // _kodeBank = atoi(_kode);
+                    cout << "Bank Tujuan\t: " << bank[_kodeBank - 1] << '\n';
                     readFile.getline(tampung, 100);
-                    cout << "Bank Tujuan: " << tampung << '\n';
+                    cout << "No. Rek Tujuan\t: " << tampung << '\n';
                     readFile.getline(tampung, 100);
-                    cout << "No. Rek Tujuan: " << tampung << '\n';
-                    readFile.getline(tampung, 100);
-                    cout << "Jumlah Transfer: " << tampung << '\n';
+                    cout << "Jumlah Transfer\t: " << tampung << '\n';
                     readFile.getline(tampung, 2);
                     cout << '\n';
                 }
@@ -197,6 +228,7 @@ public:
 
 int main()
 {
+    awal();
     Antrian hariIni;
     int pilihan;
 
@@ -206,12 +238,13 @@ int main()
         cout << "Pilihan Layanan: \n";
         cout << "1. Tambah Antrian\n";
         cout << "2. Proses Antrian\n";
-        cout << "3. Kode Antrian Sekarang\n";
+        cout << "3. Panjang Antrian Sekarang\n";
         cout << "4. Hapus Antrian\n";
         cout << "5. Tampilkan Antrian\n";
         cout << "6. Keluar\n";
         cout << "Pilihan: ";
         cin >> pilihan;
+        cout << '\n';
 
         switch (pilihan)
         {
@@ -224,7 +257,7 @@ int main()
             break;
         
         case 3:
-            hariIni.kodeAntrianSekarang();
+            hariIni.panjangAntrianSekarang();
             break;
         
         case 4:
@@ -236,9 +269,11 @@ int main()
             break;
         
         case 6:
+            hariIni.hapusAntrian();
             exit(1);
         }
 
+        cout << '\n';
         system("pause");
     } while(pilihan != 6);
 }
@@ -250,4 +285,5 @@ void pilihanBank()
     {
         cout << i + 1 << ". " << bank[i] << '\n';
     }
+    cout << '\n';
 }
