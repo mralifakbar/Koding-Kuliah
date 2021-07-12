@@ -101,8 +101,8 @@ public:
         }
         else
         {
-            cout << "Antrian dengan kode antrian " << data[panjangAntrian].kodeAntrian << " sedang diproses\n";
-            cout << "Tersisa " << panjangAntrian + 1 << " orang dalam antrian\n";
+            cout << "Antrian dengan kode antrian " << data[0].kodeAntrian << " sedang diproses\n";
+            cout << "Tersisa " << panjangAntrian  << " orang dalam antrian\n";
 
             for(int i = 0; i < panjangAntrian; i++)
             {
@@ -187,6 +187,7 @@ public:
                     readFile.getline(tampung, 100);
                     cout << "Jumlah Transfer: " << tampung << '\n';
                     readFile.getline(tampung, 2);
+                    cout << '\n';
                 }
             }
             readFile.close();
