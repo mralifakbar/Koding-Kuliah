@@ -25,7 +25,7 @@ int main()
         }
         else if(ch != ' ' && ch != '.')
         {
-            inputStr.push_back(ch);
+            inputStr.push_back(tolower(ch));
         }
 
         countLen++;
