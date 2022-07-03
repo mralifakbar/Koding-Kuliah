@@ -1,0 +1,7 @@
+var x = document.getElementsByClassName('dataTable');
+for (i = 0; i < 16; i++) {
+    x[0].tBodies[0].rows[i].cells[4].children[0].classList.add("checked");
+    x[0].tBodies[0].rows[i].cells[4].children[0].children[0].checked = true
+}
+x[0].tFoot.rows[0].cells[0].children[0].classList.add("checked");
+x[0].tFoot.rows[0].cells[0].children[0].children[0].checked = true;
